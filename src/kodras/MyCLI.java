@@ -1,5 +1,7 @@
 package kodras;
 
+import java.util.Properties;
+
 import org.apache.commons.cli2.*;
 import org.apache.commons.cli2.builder.*;
 import org.apache.commons.cli2.commandline.Parser;
@@ -58,7 +60,7 @@ public class MyCLI {
 	 * Trennzeichen
 	 * Kurzform: -t
 	 */
-	private String trennzeichen = "";
+	private String trennzeichen = ";";
 	
 	/**
 	 * Felder die ausgegeben werden sollen
@@ -128,12 +130,12 @@ public class MyCLI {
 				.withArgument(abuilder.withName("Name der Ausgabedatei. Standard: keine -> Ausgabe auf der Konsole\tNICHT VERPFLICHTEND")
 						.withMinimum(1).withMaximum(1).create()).create();
 		
-//		Option tabelle = obuilder.withShortName("T").withRequired(true)
-//				.withArgument(abuilder.withName("Tabellename\tVERPFLICHTEND")
-//						.withMinimum(1).withMaximum(1).create()).create();
-		//Option tabelle = OptionBuilder.withArgName("Tabellenname").hasArg().withDescription("Tabellename\tVERPFLICHTEND").isRequired(true).create("T");
 		Option tabelle = obuilder.withShortName("T").withRequired(true)
-				.withDescription("Tabellename\tVERPFLICHTEND").create();
+				.withArgument(abuilder.withName("Tabellename\tVERPFLICHTEND")
+						.withMinimum(1).withMaximum(1).create()).create();
+		//Option tabelle = OptionBuilder.withArgName("Tabellenname").hasArg().withDescription("Tabellename\tVERPFLICHTEND").isRequired(true).create("T");
+//		Option tabelle = obuilder.withShortName("T").withRequired(true)
+//				.withDescription("Tabellename\tVERPFLICHTEND").create();
 		
 		Group options = gbuilder.withName("options").withOption(host).withOption(user).withOption(passwd).withOption(db)
 				.withOption(sort).withOption(sortierrichtung).withOption(bedinnung).withOption(trennzeichen).withOption(felder)
@@ -169,9 +171,7 @@ public class MyCLI {
 				try {
 					this.host = (String) cl.getValue(host);
 				} catch(Exception e) {
-				//wenn etwas beim Catsen schief geht wird die Hilfe/Beschreibung ausgegeben und das Programm beendet
-					hf.print();
-					System.exit(1);
+					this.host = "localhost";
 				}
 			}
 			
@@ -179,9 +179,7 @@ public class MyCLI {
 				try {
 					this.user = (String) cl.getValue(user);
 				} catch(Exception e) {
-				//wenn etwas beim Catsen schief geht wird die Hilfe/Beschreibung ausgegeben und das Programm beendet
-					hf.print();
-					System.exit(1);
+				this.user = new Properties(System.getProperties()).getProperty("user.name");
 				}
 			}
 			
@@ -189,9 +187,7 @@ public class MyCLI {
 				try {
 					this.passwd = (String) cl.getValue(passwd);
 				} catch(Exception e) {
-				//wenn etwas beim Catsen schief geht wird die Hilfe/Beschreibung ausgegeben und das Programm beendet
-					hf.print();
-					System.exit(1);
+					this.passwd = "";
 				}
 			}
 			
@@ -199,7 +195,7 @@ public class MyCLI {
 				try {
 					this.db = (String) cl.getValue(db);
 				} catch(Exception e) {
-				//wenn etwas beim Catsen schief geht wird die Hilfe/Beschreibung ausgegeben und das Programm beendet
+					//wenn catsen fehlschlaegt, wird Hilfe/Beschreibung ausgegeben und Programm beendet
 					hf.print();
 					System.exit(1);
 				}
@@ -209,9 +205,7 @@ public class MyCLI {
 				try {
 					this.sort = (String) cl.getValue(sort);
 				} catch(Exception e) {
-				//wenn etwas beim Catsen schief geht wird die Hilfe/Beschreibung ausgegeben und das Programm beendet
-					hf.print();
-					System.exit(1);
+					this.sort = "";
 				}
 			}
 			
@@ -219,9 +213,7 @@ public class MyCLI {
 				try {
 					this.sortierrichtung = (String) cl.getValue(sortierrichtung);
 				} catch(Exception e) {
-				//wenn etwas beim Catsen schief geht wird die Hilfe/Beschreibung ausgegeben und das Programm beendet
-					hf.print();
-					System.exit(1);
+					this.sortierrichtung = "ASC";
 				}
 			}
 			
@@ -229,7 +221,7 @@ public class MyCLI {
 				try {
 					this.db = (String) cl.getValue(db);
 				} catch(Exception e) {
-				//wenn etwas beim Catsen schief geht wird die Hilfe/Beschreibung ausgegeben und das Programm beendet
+					//wenn catsen fehlschlaegt, wird Hilfe/Beschreibung ausgegeben und Programm beendet
 					hf.print();
 					System.exit(1);
 				}
@@ -239,9 +231,7 @@ public class MyCLI {
 				try {
 					this.bedinnung = (String) cl.getValue(bedinnung);
 				} catch(Exception e) {
-				//wenn etwas beim Catsen schief geht wird die Hilfe/Beschreibung ausgegeben und das Programm beendet
-					hf.print();
-					System.exit(1);
+				this.bedinnung = "";
 				}
 			}
 			
@@ -249,9 +239,7 @@ public class MyCLI {
 				try {
 					this.trennzeichen = (String) cl.getValue(trennzeichen);
 				} catch(Exception e) {
-				//wenn etwas beim Catsen schief geht wird die Hilfe/Beschreibung ausgegeben und das Programm beendet
-					hf.print();
-					System.exit(1);
+					this.trennzeichen = ";";
 				}
 			}
 			
@@ -259,7 +247,7 @@ public class MyCLI {
 				try {
 					this.felder = (String) cl.getValue(felder);
 				} catch(Exception e) {
-				//wenn etwas beim Catsen schief geht wird die Hilfe/Beschreibung ausgegeben und das Programm beendet
+					//wenn catsen fehlschlaegt, wird Hilfe/Beschreibung ausgegeben und Programm beendet
 					hf.print();
 					System.exit(1);
 				}
@@ -269,7 +257,7 @@ public class MyCLI {
 				try {
 					this.ausgabe = (String) cl.getValue(ausgabe);
 				} catch(Exception e) {
-				//wenn etwas beim Catsen schief geht wird die Hilfe/Beschreibung ausgegeben und das Programm beendet
+					//wenn catsen fehlschlaegt, wird Hilfe/Beschreibung ausgegeben und Programm beendet
 					hf.print();
 					System.exit(1);
 				}
@@ -279,14 +267,14 @@ public class MyCLI {
 				try {
 					this.tabelle = (String) cl.getValue(tabelle);
 				} catch(Exception e) {
-				//wenn etwas beim Catsen schief geht wird die Hilfe/Beschreibung ausgegeben und das Programm beendet
+					//wenn catsen fehlschlaegt, wird Hilfe/Beschreibung ausgegeben und Programm beendet
 					hf.print();
 					System.exit(1);
 				}
 			}
 			
 		} catch(OptionException e) {
-		//wenn etwas beim Verarbeiten der Optionen und argmente schief geht wird die Hilfe/Beschreibung augegeben und das Programm beendet
+			//wenn Verarbeiten der Optionen und Argmente fehlschlaegt, wird Hilfe/Beschreibung ausgegeben und Programm beendet
 			hf.print();
 			System.exit(1);
 		}
