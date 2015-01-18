@@ -10,7 +10,7 @@ import org.apache.commons.cli2.util.HelpFormatter;
 /**
  * 
  * @author Dominik Kodras
- * @version 
+ * @version 18.01.2015
  */
 public class MyCLI {
 	
@@ -48,7 +48,7 @@ public class MyCLI {
 	 * Sortierrichtung
 	 * Kurzform: -r
 	 */
-	private String sortierrichtung = "";
+	private String sortierrichtung = "ASC";
 	
 	/**
 	 * Bedinnnung in SQL-Syntax
@@ -66,13 +66,13 @@ public class MyCLI {
 	 * Felder die ausgegeben werden sollen
 	 * Kurzform: -f
 	 */
-	private String felder = "";
+	private String felder = "*";
 	
 	/**
 	 * Name der Ausgabedatei
 	 * Kurzform: -o
 	 */
-	private String ausgabe = "";
+	private String ausgabe = null;
 	
 	/**
 	 * Tabellenname
@@ -88,7 +88,6 @@ public class MyCLI {
 		DefaultOptionBuilder obuilder = new DefaultOptionBuilder();
 		ArgumentBuilder abuilder = new ArgumentBuilder();
 		GroupBuilder gbuilder = new GroupBuilder();
-		//HelpFormatter helpf = new HelpFormatter();
 		
 		Option host = obuilder.withShortName("h").withRequired(false)
 				.withArgument(abuilder.withName("Hostname des DBMS. Standard: localhost\tNICHT VERPFLICHTEND")
@@ -133,9 +132,6 @@ public class MyCLI {
 		Option tabelle = obuilder.withShortName("T").withRequired(true)
 				.withArgument(abuilder.withName("Tabellename\tVERPFLICHTEND")
 						.withMinimum(1).withMaximum(1).create()).create();
-		//Option tabelle = OptionBuilder.withArgName("Tabellenname").hasArg().withDescription("Tabellename\tVERPFLICHTEND").isRequired(true).create("T");
-//		Option tabelle = obuilder.withShortName("T").withRequired(true)
-//				.withDescription("Tabellename\tVERPFLICHTEND").create();
 		
 		Group options = gbuilder.withName("options").withOption(host).withOption(user).withOption(passwd).withOption(db)
 				.withOption(sort).withOption(sortierrichtung).withOption(bedinnung).withOption(trennzeichen).withOption(felder)
@@ -143,9 +139,7 @@ public class MyCLI {
 		
 		Parser parser = new Parser();
 		parser.setGroup(options);
-	
 		
-	//[3]
 		HelpFormatter hf = new HelpFormatter();
 		hf.setShellCommand("Exporter");
 		hf.setGroup(options);
@@ -156,8 +150,7 @@ public class MyCLI {
 		hf.getLineUsageSettings().add(DisplaySetting.DISPLAY_PROPERTY_OPTION);
 		hf.getLineUsageSettings().add(DisplaySetting.DISPLAY_PARENT_ARGUMENT);
 		hf.getLineUsageSettings().add(DisplaySetting.DISPLAY_ARGUMENT_BRACKETED);
-	//[3]
-	//Apache2, "Helping", aktualisiert: 2013, online verfügbar: http://commons.apache.org/sandbox/commons-cli2/examples/ant.html, zuletzt besucht am: 22.10.2013
+		//http://commons.apache.org/sandbox/commons-cli2/examples/ant.html
 		
 		
 		/*
@@ -166,7 +159,6 @@ public class MyCLI {
 		 */
 		try {
 			CommandLine cl = parser.parse(args);
-			
 			if(cl.hasOption(host)) {
 				try {
 					this.host = (String) cl.getValue(host);
@@ -275,14 +267,11 @@ public class MyCLI {
 			
 		} catch(OptionException e) {
 			//wenn Verarbeiten der Optionen und Argmente fehlschlaegt, wird Hilfe/Beschreibung ausgegeben und Programm beendet
+			//System.out.println(this.felder);
 			hf.print();
 			System.exit(1);
 		}
 	}
-
-	
-	
-	//Methode(n)
 	
 	/**
 	 * Gibt die Hostadresse zurueck
